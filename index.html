@@ -971,8 +971,8 @@ function onPairChange(rank){
   syncPairs();
   ROWS.forEach(function(row,j){row.classList.toggle('sel',!!pairOf(j))});
   typeHint.textContent = pairOf(0)
-    ? '1순위는 필수, 2·3순위는 선택입니다. 같은 블록·평형은 중복 선택할 수 없습니다.'
-    : '블록과 평형을 함께 선택해 주세요. 1순위는 필수, 2·3순위는 선택입니다.';
+    ? '같은 블록·평형은 중복 선택할 수 없습니다. (관심 평형은 선택 항목입니다)'
+    : '희망하시는 블록과 평형을 선택해 주세요. (선택 사항 · 건너뛰어도 등록됩니다)';
   mark('f-type',false);
 }
 SEL_B.forEach(function(sel,i){sel.addEventListener('change',function(){onPairChange(i+1)})});
@@ -1029,8 +1029,13 @@ if(form) form.addEventListener('submit',function(e){
   .then(function(){
     location.href='thankyou.html?'+new URLSearchParams({ch:src.channel,eid:eid}).toString();
   })
-  .catch(function(){
-    alert('전송 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+  .catch(function(err){
+    var m=String(err&&err.message||'');
+    var msg='전송 중 오류가 발생했습니다.\n잠시 후 다시 시도해 주세요.';
+    if(/name\/phone/.test(m))      msg='이름과 휴대전화 번호를 다시 확인해 주세요.';
+    else if(/invalid block/.test(m)) msg='관심 평형 선택 값이 올바르지 않습니다.\n관심 평형은 선택 항목입니다 — 비워두거나 다시 선택해 주세요.';
+    else if(/no such column|no such table/.test(m)) msg='저장 중 문제가 발생했습니다.\n잠시 후 다시 시도해 주세요.';
+    alert(msg);
     form.dataset.submitting='0';
     if(btn){btn.disabled=false;btn.innerHTML=t0}
   });
