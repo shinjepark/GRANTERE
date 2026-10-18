@@ -2,14 +2,14 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>더샵 송도그란테르 | 사전예약 등록</title>
 <meta name="description" content="더샵 송도그란테르 사전의향서 접수. 인천 연수구 송도동 32번지 일대 6개 블록. 관심 블록·평형을 등록하시면 순차 안내드립니다.">
 <meta name="keywords" content="더샵 송도그란테르ㅣ사전의향서ㅣ사전예약등록ㅣ송도분양ㅣ인천연수구ㅣ포스코이앤씨ㅣTHE SHARPㅣ아파트ㅣ84㎡ㅣ198㎡">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="더샵 송도그란테르">
 <meta property="og:title" content="더샵 송도그란테르 | 사전예약 등록">
-<meta property="og:description" content="사전예약을 먼저 등록한 고객님부터 순차 안내드립니다.">
+<meta property="og:description" content="사전의향서를 먼저 제출한 고객부터 순차 안내드립니다.">
 <meta property="og:image" content="https://grantere.pages.dev/og_image.jpg">
 <meta property="og:image:secure_url" content="https://grantere.pages.dev/og_image.jpg">
 <meta property="og:image:type" content="image/jpeg">
@@ -415,6 +415,23 @@ footer .disc{margin:20px 0 0;padding-top:18px;border-top:1px solid var(--line2);
 #rbBubble.on{animation:rvBubble .5s both}
 @keyframes rvBubble{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){#rbBubble.on{animation:none}}
+
+/* ══════════ v11 오버라이드 ══════════ */
+/* 헤더 : 첫 화면(히어로 위)은 남색 고정 → 스크롤하면 틴팅된 유리 (opacity 속성 사용 안 함) */
+#header .hdbar{transition:background .3s ease, box-shadow .3s ease, border-color .3s ease}
+#header.solid .hdbar{
+  /* 틴트 농도만 조절 (opacity 속성은 사용하지 않음) — 흰 메뉴 글씨 대비 확보 */
+  background:linear-gradient(180deg,rgba(19,32,41,.74),rgba(19,32,41,.58));
+  -webkit-backdrop-filter:blur(18px) saturate(150%);
+  backdrop-filter:blur(18px) saturate(150%);
+  border-bottom-color:rgba(178,138,69,.34);
+  box-shadow:0 12px 34px rgba(9,15,20,.26)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  #header.solid .hdbar{background:rgba(19,32,41,.88)}   /* 유리 미지원 브라우저 대체 */
+}
+/* 기본 화면 확대 고정 (라이트박스 이미지는 자체 touch-action:none 유지) */
+html,body{touch-action:pan-x pan-y}
+#lb img{touch-action:none}
 </style>
 </head>
 <body>
@@ -1143,20 +1160,47 @@ lbImg.addEventListener('click',function(e){
   lbSetScale(Math.round(lbScale*1.7*100)/100);   /* 클릭할 때마다 1.7배씩 — 한계 없음 */
 });
 lbImg.addEventListener('dblclick',function(e){ e.preventDefault(); e.stopPropagation(); lbSetScale(1); });
+var lbPts={}, lbPinch=false, lbStartDist=1, lbStartScale=1;
+function lbPtCount(){ var n=0; for(var k in lbPts) if(lbPts.hasOwnProperty(k)) n++; return n; }
 lbImg.addEventListener('pointerdown',function(e){
-  if(lbScale<=1.001) return;
-  lbDrag=true;lbMoved=false;lbSX=e.clientX-lbX;lbSY=e.clientY-lbY;
+  lbPts[e.pointerId]={x:e.clientX,y:e.clientY};
   try{lbImg.setPointerCapture(e.pointerId)}catch(_){}
-  lbImg.style.cursor='grabbing';
+  if(lbPtCount()>=2){                     /* 두 손가락 → 핀치 시작 */
+    lbPinch=true; lbDrag=false; lbMoved=true;
+    var ids=Object.keys(lbPts), a=lbPts[ids[0]], b=lbPts[ids[1]];
+    lbStartDist=Math.hypot(a.x-b.x,a.y-b.y)||1;
+    lbStartScale=lbScale;
+    lbImg.style.cursor='grabbing';
+  }else if(lbScale>1.001){                /* 한 손가락 → 확대 상태에서 이동 */
+    lbDrag=true; lbMoved=false; lbSX=e.clientX-lbX; lbSY=e.clientY-lbY;
+    lbImg.style.cursor='grabbing';
+  }
 });
 lbImg.addEventListener('pointermove',function(e){
-  if(!lbDrag) return;
-  if(Math.abs(e.clientX-lbSX-lbX)>4||Math.abs(e.clientY-lbSY-lbY)>4) lbMoved=true;
-  lbX=e.clientX-lbSX; lbY=e.clientY-lbSY; lbApply();
+  if(!lbPts.hasOwnProperty(e.pointerId)) return;
+  lbPts[e.pointerId]={x:e.clientX,y:e.clientY};
+  if(lbPinch && lbPtCount()>=2){          /* 손가락 벌리면 그대로 확대 */
+    var ids=Object.keys(lbPts), a=lbPts[ids[0]], b=lbPts[ids[1]];
+    var d=Math.hypot(a.x-b.x,a.y-b.y)||1;
+    var ns=lbStartScale*(d/lbStartDist);
+    if(ns<1) ns=1;                        /* 상한 없음 */
+    lbSetScale(Math.round(ns*1000)/1000);
+    lbMoved=true;
+    return;
+  }
+  if(lbDrag){
+    if(Math.abs(e.clientX-lbSX-lbX)>4||Math.abs(e.clientY-lbSY-lbY)>4) lbMoved=true;
+    lbX=e.clientX-lbSX; lbY=e.clientY-lbSY; lbApply();
+  }
 });
 function lbEnd(e){
-  if(!lbDrag) return; lbDrag=false;
-  lbImg.style.cursor=lbScale>1.001?'grab':'zoom-in';
+  delete lbPts[e.pointerId];
+  if(lbPtCount()<2) lbPinch=false;
+  if(lbPtCount()===0){
+    lbDrag=false;
+    lbImg.style.cursor=lbScale>1.001?'grab':'zoom-in';
+    if(lbScale<1.05) lbSetScale(1);       /* 손가락 떼면 100% 아래로는 안 내려감 */
+  }
   try{lbImg.releasePointerCapture(e.pointerId)}catch(_){}
 }
 lbImg.addEventListener('pointerup',lbEnd);
@@ -1171,6 +1215,19 @@ if(lbOut) lbOut.addEventListener('click',function(e){e.stopPropagation();lbZoomB
 if(lbZoomEl){ lbZoomEl.style.cursor='pointer'; lbZoomEl.title='클릭하면 100%로 초기화';
   lbZoomEl.addEventListener('click',function(e){e.stopPropagation();lbSetScale(1)}) }
 addEventListener('keydown',function(e){if(e.key==='Escape'&&lb.classList.contains('on')) closeLb()});
+
+/* 기본 화면(라이트박스 밖)에서는 확대 고정 — 핀치·더블탭 모두 차단 */
+function pageZoomBlock(e){ if(!lb.classList.contains('on')) e.preventDefault(); }
+document.addEventListener('gesturestart',pageZoomBlock,{passive:false});
+document.addEventListener('gesturechange',pageZoomBlock,{passive:false});
+document.addEventListener('gestureend',pageZoomBlock,{passive:false});
+var lastTap=0;
+document.addEventListener('touchend',function(e){
+  if(lb.classList.contains('on')) return;
+  var now=Date.now();
+  if(now-lastTap<320 && e.cancelable) e.preventDefault();
+  lastTap=now;
+},{passive:false});
 })();
 </script>
 </body>
