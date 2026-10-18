@@ -43,7 +43,12 @@ export async function onRequestPost(context) {
     const page_url     = S(data.page_url, 300);
 
     if (!name || !phone) return json({ ok: false, error: "name/phone required" }, 400);
-    if (!ALLOWED_BLOCKS.includes(block)) return json({ ok: false, error: "invalid block" }, 400);
+
+    /* 관심평형은 선택 항목 — 비어 있으면 통과, 값이 있으면 유효성만 확인 */
+    if (block && !ALLOWED_BLOCKS.includes(block)) {
+      return json({ ok: false, error: "invalid block" }, 400);
+    }
+    if (!block) { block = type = block2 = type2 = block3 = type3 = ""; }
 
     const createdAt = new Date(Date.now() + 9 * 3600 * 1000)
       .toISOString().replace("T", " ").slice(0, 19);
