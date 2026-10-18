@@ -408,6 +408,21 @@ footer .disc{margin:20px 0 0;padding-top:18px;border-top:1px solid var(--line2);
 /* 공지 띠 : 히어로 이미지와 같은 폭(--maxw 1180px)으로 정렬 — 화면 끝까지 늘어나지 않게 */
 .notice{background:transparent;padding:0}
 .notice .wrap{background:linear-gradient(90deg,#b5121b,#dc1f28 48%,#b5121b)}
+/* 공지 : 데스크톱 한 줄 → 모바일 두 줄 중앙 정렬 */
+.notice .wrap{flex-wrap:nowrap}
+.notice p{margin:0;white-space:nowrap}
+.notice p .ln{display:inline}
+.notice p .sep{display:inline;margin:0 .55em;opacity:.85}
+@media(max-width:760px){
+  /* 배지는 왼쪽 끝 · 높이는 두 줄 텍스트의 중앙에 맞춤 (3줄로 쌓이지 않게) */
+  .notice .wrap{flex-direction:row;flex-wrap:nowrap;align-items:center;gap:13px;
+    text-align:center;padding:16px 16px}
+  .notice b{flex:none;align-self:center}
+  .notice p{flex:1;min-width:0;white-space:normal;text-align:center;
+    line-height:1.52;font-size:clamp(14px,4.05vw,19px)}
+  .notice p .ln{display:block}
+  .notice p .sep{display:none}
+}
 </style>
 </head>
 <body>
@@ -511,7 +526,7 @@ footer .disc{margin:20px 0 0;padding-top:18px;border-top:1px solid var(--line2);
 <div class="notice">
   <div class="wrap">
     <b>공지</b>
-    <p><span class="neon">사전예약 진행 중</span> — 등록 순서대로 담당자가 연락드립니다.</p>
+    <p><span class="ln">10월 중 선착순 OPEN예정</span><span class="sep">-</span><span class="ln neon">사전예약 진행중</span></p>
   </div>
 </div>
 
