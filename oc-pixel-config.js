@@ -1,0 +1,184 @@
+/* ============================================================
+   더샵 송도그란테르 — 광고 채널 전환추적 설정 파일
+   ------------------------------------------------------------
+   · 따옴표 안에 ID를 채워 넣으면 그 채널만 자동으로 켜집니다.
+   · 빈 값('')인 채널은 아무 스크립트도 불러오지 않습니다. (광고 전에도 안전)
+   · index.html(방문 기록) / thankyou.html(등록 전환)이 이 파일 하나를 공유합니다.
+   · 이 파일만 수정하면 양쪽 페이지에 동시에 반영됩니다.
+   ============================================================ */
+window.OC_PIXELS = {
+  /* 메타(페이스북·인스타그램) : 이벤트 관리자 → 픽셀 ID */
+  meta: { id: '' },
+
+  /* 구글 : Google Ads 전환 → 전환 ID + 전환 라벨 */
+  google: { id: '', label: '' },
+
+  /* 카카오 : 카카오비즈니스 픽셀&SDK → 픽셀 ID */
+  kakao: { id: '' },
+
+  /* 당근 : 광고계정 픽셀&SDK → 픽셀 ID */
+  daangn: { id: '' },
+
+  /* 네이버 : 프리미엄 로그분석 신청 후 받는 'wa' 값 (s_로 시작하는 문자열) */
+  naver: { wa: '' }
+};
+
+/* ================= 이하 자동 동작부 (수정 불필요) ================= */
+(function () {
+  'use strict';
+  var P = window.OC_PIXELS || {};
+  /* 완료페이지 판별 : Cloudflare Pages가 thankyou.html → /thankyou 로 정리하므로
+     확장자 유무와 무관하게 'thankyou' 경로 전체로 판별 */
+  var isTY = /thankyou/i.test(location.pathname);
+
+  function addScript(src) {
+    var s = document.createElement('script');
+    s.async = true; s.src = src;
+    (document.head || document.documentElement).appendChild(s);
+  }
+
+  /* --- 메타 픽셀 (표준 부트스트랩) --- */
+  function meta() {
+    if (!(P.meta && P.meta.id)) return null;
+    if (!window.fbq) {
+      var n = window.fbq = function () {
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+      };
+      if (!window._fbq) window._fbq = n;
+      n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
+      addScript('https://connect.facebook.net/en_US/fbevents.js');
+      n('init', P.meta.id);
+    }
+    return window.fbq;
+  }
+
+  /* --- 구글 전환 태그 --- */
+  function gtagInit() {
+    if (!(P.google && P.google.id && String(P.google.id).indexOf('AW-') === 0)) return false;
+    window.dataLayer = window.dataLayer || [];
+    if (!window.gtag) {
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag.l = 1 * new Date();
+      addScript('https://www.googletagmanager.com/gtag/js?id=' + P.google.id);
+    }
+    window.gtag('config', P.google.id);
+    return true;
+  }
+
+  /* --- 당근 픽셀 (공식 부트스트랩) --- */
+  function daangn() {
+    if (!(P.daangn && P.daangn.id)) return null;
+    if (!window.karrotPixel) {
+      (function (w, d) {
+        if (w.karrotPixel) return;
+        var k = { stub: true, queue: [] };
+        k.init = function () { k.queue.push(['init', arguments, Date.now()]); };
+        k.track = function () { k.queue.push(['track', arguments, Date.now()]); };
+        w.karrotPixel = k;
+        var s = d.createElement('script');
+        s.async = true;
+        s.src = 'https://karrot-pixel.business.daangn.com/karrot-pixel.js';
+        var f = d.getElementsByTagName('script')[0];
+        f && f.parentNode ? f.parentNode.insertBefore(s, f) : d.head.appendChild(s);
+      })(window, document);
+      window.karrotPixel.init(P.daangn.id);
+    }
+    return window.karrotPixel;
+  }
+
+  /* --- 카카오 픽셀 (공식 kp.js 로드 후 발화) --- */
+  function kakao(cb) {
+    if (!(P.kakao && P.kakao.id)) return;
+    if (window.kakaoPixel) { cb(); return; }
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://t1.daumcdn.net/kas/static/kp.js';
+    s.onload = function () { if (window.kakaoPixel) cb(); };
+    (document.head || document.documentElement).appendChild(s);
+  }
+
+  /* --- 네이버 프리미엄 로그분석 (wa 값이 있을 때만 로드) --- */
+  function naver(done) {
+    if (!(P.naver && P.naver.wa)) return false;
+    if (window.wcs_do) {
+      if (!window.wcs_add) window.wcs_add = {};
+      window.wcs_add['wa'] = P.naver.wa;
+      done();
+      return true;
+    }
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = '//wcs.naver.net/wcslog.js';
+    s.onload = function () {
+      if (!window.wcs_add) window.wcs_add = {};
+      window.wcs_add['wa'] = P.naver.wa;
+      done();
+    };
+    (document.head || document.documentElement).appendChild(s);
+    return true;
+  }
+
+  function start() {
+    if (!isTY) {
+      /* ── 메인 페이지 : 채널별 방문 기록 ── */
+      var fb = meta();
+      if (fb) fb('track', 'PageView');
+      gtagInit();
+
+      /* 당근 : 방문 기록 */
+      var dk = daangn();
+      if (dk) dk.track('ViewPage');
+
+      /* 카카오 : 방문 기록 */
+      kakao(function () { window.kakaoPixel(P.kakao.id).pageView(); });
+
+      /* 네이버 : 방문 기록 + 유입경로 */
+      naver(function () {
+        try {
+          if (!window._nasa) window._nasa = {};
+          if (window.wcs && window.wcs.inflow) window.wcs.inflow(location.hostname);
+          if (window.wcs_do) window.wcs_do();
+        } catch (e) {}
+      });
+    } else {
+      /* ── 등록 완료 페이지 : 채널별 전환 발화 (eid 포함) ── */
+      var eid = (new URLSearchParams(location.search).get('eid')) || '';
+
+      /* 메타 : Lead 전환 */
+      var fb2 = meta();
+      if (fb2) fb2('track', 'Lead', { event_id: eid });
+
+      /* 구글 전환은 thankyou.html 에 삽입된 구글 공식 스니펫이 담당 (이중 발화 방지) */
+
+      /* 당근 : 페이지뷰 + 신청 완료 전환 */
+      var dk2 = daangn();
+      if (dk2) { dk2.track('ViewPage'); dk2.track('SubmitApplication'); }
+
+      /* 카카오 : 페이지뷰 + 등록 완료 전환
+         ※ kp.js 에는 lead() 메서드가 없음. 표준 이벤트인 completeRegistration 으로 발화하며,
+            카카오 캠페인 세팅 시 전환 이벤트로 "회원가입(CompleteRegistration)"을 선택해야 집계됩니다. */
+      kakao(function () {
+        try {
+          var kp = window.kakaoPixel(P.kakao.id);
+          kp.pageView();
+          if (typeof kp.completeRegistration === 'function') kp.completeRegistration();
+        } catch (e) {}
+      });
+
+      /* 네이버 : 신청완료(lead) 전환 */
+      naver(function () {
+        try {
+          if (window.wcs && window.wcs.trans) window.wcs.trans({ type: 'lead' });
+          if (window.wcs_do) window.wcs_do();
+        } catch (e) {}
+      });
+
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'oc_conversion', eid: eid });
+    }
+  }
+
+  /* 페이지 로딩이 끝난 뒤 붙습니다 — 본문 로딩 속도에 영향 없음 */
+  if (document.readyState === 'complete') setTimeout(start, 300);
+  else window.addEventListener('load', function () { setTimeout(start, 300); });
+})();

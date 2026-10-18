@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>관리자 | 더샵 송도그란테르</title>
+<link rel="icon" href="images/favicon-32.png">
+<style>
+:root{--ink:#132029;--ink2:#22333f;--gold:#b28a45;--gold3:#8a6a2e;--white:#fff;--cream:#f7f4ee;--mist:#eff3f5;
+--muted:#697077;--line:rgba(178,138,69,.30);--line2:rgba(19,32,41,.10);--red:#b8442f;
+--serif:"Nanum Myeongjo",'Apple SD Gothic Neo',serif;
+--sans:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',system-ui,sans-serif}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--mist);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.6}
+.wrap{max-width:1400px;margin:0 auto;padding:22px 18px 60px}
+h1{font-family:var(--serif);font-size:21px;margin:0;letter-spacing:-.03em}
+h1 small{display:block;font-family:var(--sans);font-size:11.5px;color:var(--muted);font-weight:400;letter-spacing:0;margin-top:4px}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.card{background:var(--white);border:1px solid var(--line2);border-radius:4px;padding:18px}
+.login{max-width:380px;margin:12vh auto;border-top:4px solid var(--gold);text-align:center}
+.login h1{margin-bottom:6px}
+.login p{color:var(--muted);font-size:13px;margin:0 0 20px}
+.login input{width:100%;padding:13px 14px;border:1px solid var(--line2);border-radius:2px;margin-bottom:12px}
+.login button{width:100%;padding:14px;background:var(--ink);color:#fff;border:0;border-radius:2px;font-weight:800}
+.login .msg{color:var(--red);font-size:12.5px;min-height:18px;margin-top:10px}
+.hd{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.hd .act{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:10px 16px;border:1px solid var(--line2);background:var(--white);border-radius:2px;font-size:13px;font-weight:700}
+.btn:hover{background:var(--cream)}
+.btn-p{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn-p:hover{background:var(--ink2)}
+.kpis{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:18px}
+.kpi{background:var(--white);border:1px solid var(--line2);border-left:3px solid var(--gold);border-radius:4px;padding:15px 17px}
+.kpi .l{font-size:11.5px;color:var(--muted);letter-spacing:.02em}
+.kpi .v{font-size:26px;font-weight:800;letter-spacing:-.03em;margin-top:5px;font-variant-numeric:tabular-nums}
+.kpi .s{font-size:11.5px;color:var(--muted);margin-top:2px}
+.grid2{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:960px){.grid2{grid-template-columns:1fr 1fr}}
+h2{font-size:14px;margin:0 0 14px;letter-spacing:-.01em}
+h2 span{font-weight:400;color:var(--muted);font-size:12px;margin-left:6px}
+.bars{display:grid;gap:7px}
+.bar{display:grid;grid-template-columns:104px 1fr 52px;gap:10px;align-items:center;font-size:12.5px}
+.bar .n{color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .t{height:9px;background:var(--mist);border-radius:5px;overflow:hidden}
+.bar .t i{display:block;height:100%;background:var(--gold);border-radius:5px}
+.bar .v{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.chart{display:flex;align-items:flex-end;gap:4px;height:130px;padding-top:8px}
+.chart .c{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;height:100%}
+.chart .c i{width:100%;background:var(--gold);border-radius:2px 2px 0 0;min-height:2px;display:block}
+.chart .c b{font-size:10px;color:var(--muted);font-weight:700}
+.chart .c em{font-size:9.5px;color:var(--muted);font-style:normal;writing-mode:vertical-rl;height:34px;overflow:hidden}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:20px 0 12px}
+.toolbar input[type=search]{flex:1;min-width:180px;padding:11px 13px;border:1px solid var(--line2);border-radius:2px;background:var(--white)}
+.toolbar select{padding:11px 13px;border:1px solid var(--line2);border-radius:2px;background:var(--white)}
+table{width:100%;border-collapse:collapse;background:var(--white);font-size:13px}
+th,td{padding:11px 10px;border-bottom:1px solid var(--line2);text-align:left;vertical-align:middle}
+th{background:var(--cream);font-size:11.5px;color:var(--muted);letter-spacing:.02em;white-space:nowrap;position:sticky;top:0}
+tbody tr:hover{background:#fcfbf8}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--muted);font-size:12px}
+td.p{font-variant-numeric:tabular-nums;white-space:nowrap}
+.tag{display:inline-block;padding:2px 8px;border-radius:2px;background:var(--mist);font-size:11.5px;white-space:nowrap}
+.tag.g{background:rgba(178,138,69,.14);color:var(--gold3);font-weight:700}
+.tag.d{background:rgba(184,68,47,.10);color:var(--red)}
+.rowbtn{padding:5px 10px;border:1px solid var(--line2);background:var(--white);border-radius:2px;font-size:11.5px}
+.rowbtn:hover{background:var(--cream)}
+.tblwrap{overflow:auto;max-height:66vh;border:1px solid var(--line2);border-radius:4px;background:var(--white)}
+.empty{padding:44px;text-align:center;color:var(--muted)}
+.modal{position:fixed;inset:0;background:rgba(12,18,24,.55);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
+.modal.on{display:flex}
+.modal .box{background:var(--white);border-radius:6px;max-width:420px;width:100%;padding:24px}
+.modal h3{margin:0 0 16px;font-size:16px}
+.modal label{display:block;font-size:12px;color:var(--muted);margin:12px 0 5px}
+.modal input{width:100%;padding:11px 12px;border:1px solid var(--line2);border-radius:2px}
+.modal .f{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
+.hide{display:none !important}
+.foot{margin-top:22px;color:var(--muted);font-size:11.5px;line-height:1.8}
+</style>
+</head>
+<body>
+
+<!-- ══ 로그인 ══ -->
+<div id="loginView" class="wrap">
+  <form class="card login" id="loginForm">
+    <h1>관리자<small>더샵 송도그란테르 · 사전예약 관리</small></h1>
+    <p>비밀번호를 입력해 주세요.</p>
+    <input type="password" id="pw" placeholder="비밀번호" autocomplete="current-password">
+    <button type="submit">확인</button>
+    <div class="msg" id="loginMsg"></div>
+  </form>
+</div>
+
+<!-- ══ 대시보드 ══ -->
+<div id="dashView" class="wrap hide">
+  <div class="hd">
+    <h1>사전예약 관리<small id="subTitle">더샵 송도그란테르</small></h1>
+    <div class="act">
+      <button class="btn" id="refreshBtn">새로고침</button>
+      <button class="btn btn-p" id="csvBtn">엑셀(CSV) 저장</button>
+      <button class="btn" id="logoutBtn">로그아웃</button>
+    </div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="grid2">
+    <div class="card"><h2>유입경로별<span>신청 건수</span></h2><div class="bars" id="chBars"></div></div>
+    <div class="card"><h2>채널별 전환율<span>방문 대비 신청</span></h2><div class="bars" id="convBars"></div></div>
+  </div>
+
+  <div class="grid2" style="margin-top:14px">
+    <div class="card"><h2>관심 블록별<span>신청 건수</span></h2><div class="bars" id="blkBars"></div></div>
+    <div class="card"><h2>1순위 평형별<span>신청 건수</span></h2><div class="bars" id="typBars"></div></div>
+  </div>
+
+  <div class="grid2" style="margin-top:14px">
+    <div class="card"><h2>최근 14일 추이<span>신청 건수</span></h2><div class="chart" id="dayChart"></div></div>
+    <div class="card"><h2>최근 14일 방문<span>세션 수</span></h2><div class="chart" id="dayVisit"></div></div>
+  </div>
+
+  <div class="toolbar">
+    <input type="search" id="q" placeholder="이름 · 연락처 · 유입경로 검색">
+    <select id="fBlock"><option value="">블록 전체</option></select>
+    <select id="fChannel"><option value="">유입경로 전체</option></select>
+    <span id="cntInfo" style="color:var(--muted);font-size:12.5px"></span>
+  </div>
+
+  <div class="tblwrap">
+    <table>
+      <thead><tr>
+        <th>번호</th><th>접수일시</th><th>이름</th><th>연락처</th>
+        <th>1순위</th><th>2순위</th><th>3순위</th><th>연락가능</th><th>유입경로</th><th>광고</th><th>관리</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <div class="empty hide" id="emptyBox">표시할 신청내역이 없습니다.</div>
+
+  <p class="foot" id="footInfo"></p>
+</div>
+
+<!-- ══ 수정 모달 ══ -->
+<div class="modal" id="editModal">
+  <div class="box">
+    <h3>신청내역 수정</h3>
+    <input type="hidden" id="eId">
+    <label>이름</label><input type="text" id="eName" maxlength="50">
+    <label>연락처</label><input type="tel" id="ePhone" maxlength="30">
+    <label>1순위 블록</label><input type="text" id="eBlock" maxlength="20">
+    <label>1순위 평형</label><input type="text" id="eType" maxlength="80">
+    <label>2순위 블록</label><input type="text" id="eBlock2" maxlength="20">
+    <label>2순위 평형</label><input type="text" id="eType2" maxlength="80">
+    <label>3순위 블록</label><input type="text" id="eBlock3" maxlength="20">
+    <label>3순위 평형</label><input type="text" id="eType3" maxlength="80">
+    <label>유입경로</label><input type="text" id="eChannel" maxlength="50">
+    <div class="f">
+      <button class="btn" id="eCancel">취소</button>
+      <button class="btn btn-p" id="eSave">저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var $=function(s){return document.querySelector(s)};
+var PW='', DATA=null;
+
+function api(body){
+  return fetch('/admin',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(Object.assign({password:PW},body||{}))})
+    .then(function(r){return r.json()});
+}
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+
+/* ── 로그인 ── */
+$('#loginForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  var v=$('#pw').value; if(!v) return;
+  PW=v; $('#loginMsg').textContent='확인 중...';
+  api().then(function(d){
+    if(!d||!d.ok){
+      $('#loginMsg').textContent='비밀번호가 올바르지 않습니다.';
+      return;
+    }
+    $('#loginMsg').textContent='';
+    try{sessionStorage.setItem('__tg_pw',v)}catch(e){}
+    $('#loginView').classList.add('hide'); $('#dashView').classList.remove('hide');
+    render(d);
+  }).catch(function(){ $('#loginMsg').textContent='서버에 연결하지 못했습니다.' });
+});
+
+/* 세션 내 자동 로그인 */
+(function(){
+  var v='';try{v=sessionStorage.getItem('__tg_pw')||''}catch(e){}
+  if(v){ PW=v; api().then(function(d){ if(d&&d.ok){ $('#loginView').classList.add('hide'); $('#dashView').classList.remove('hide'); render(d);} else {PW='';try{sessionStorage.removeItem('__tg_pw')}catch(e){}} }); }
+})();
+
+$('#logoutBtn').addEventListener('click',function(){
+  try{sessionStorage.removeItem('__tg_pw')}catch(e){}
+  location.reload();
+});
+$('#refreshBtn').addEventListener('click',function(){ PW=$('#pw').value||PW; api().then(function(d){if(d&&d.ok) render(d)}) });
+
+/* ── 렌더 ── */
+function kpi(l,v,s){return '<div class="kpi"><div class="l">'+l+'</div><div class="v">'+v+'</div>'+(s?'<div class="s">'+s+'</div>':'')+'</div>'}
+
+function bars(el,arr,opts){
+  opts=opts||{};
+  if(!arr||!arr.length){el.innerHTML='<p style="color:var(--muted);font-size:12.5px;margin:0">데이터가 없습니다.</p>';return}
+  var max=Math.max.apply(null,arr.map(function(x){return x.v}))||1;
+  el.innerHTML=arr.slice(0,opts.limit||9).map(function(x){
+    var w=Math.max(2,Math.round(x.v/max*100));
+    var extra=(x.u!=null?' <span style="color:var(--muted);font-weight:400">(순 '+x.u+')</span>':'')+(x.rate!=null?' <span style="color:var(--gold3);font-weight:400">'+x.rate+'%</span>':'');
+    return '<div class="bar"><span class="n" title="'+esc(x.k)+'">'+esc(x.k)+'</span>'+
+      '<span class="t"><i style="width:'+w+'%"></i></span><span class="v">'+x.v+extra+'</span></div>';
+  }).join('');
+}
+function chart(el,arr){
+  if(!arr||!arr.length){el.innerHTML='';return}
+  var max=Math.max.apply(null,arr.map(function(x){return x.v}))||1;
+  el.innerHTML=arr.map(function(x){
+    var h=Math.max(2,Math.round(x.v/max*100));
+    return '<div class="c"><b>'+(x.v||'')+'</b><i style="height:'+h+'%"></i><em>'+x.k.slice(5)+'</em></div>';
+  }).join('');
+}
+
+function render(d){
+  DATA=d;
+  var v=d.visits||{};
+  var rate=d.total&&v.total?((d.total/v.total)*100).toFixed(1):null;
+  $('#kpis').innerHTML=
+    kpi('전체 신청',d.total)+
+    kpi('오늘',d.todayCount)+
+    kpi('최근 7일',d.weekCount)+
+    kpi('방문(세션)',v.total||0,'순 방문자 '+(v.unique||0))+
+    kpi('신청 전환율',rate!=null?rate+'%':'-','방문 대비')+
+    kpi('카운터 값',d.reservations,'하단 말풍선 숫자');
+
+  var st=d.stats||{};
+  bars($('#chBars'),st.byChannel);
+  bars($('#convBars'),(d.conversion||[]).map(function(c){return {k:c.k,v:c.leads,u:c.uniq,rate:c.rate}}));
+  bars($('#blkBars'),st.byBlock);
+  bars($('#typBars'),st.byType);
+  chart($('#dayChart'),st.byDay);
+  chart($('#dayVisit'),(v.byDay||[]).slice(-14));
+
+  /* 필터 옵션 */
+  var fb=$('#fBlock'), fc=$('#fChannel');
+  var curB=fb.value, curC=fc.value;
+  fb.innerHTML='<option value="">블록 전체</option>'+((st.byBlock||[]).map(function(x){return '<option>'+esc(x.k)+'</option>'}).join(''));
+  fc.innerHTML='<option value="">유입경로 전체</option>'+((st.byChannel||[]).map(function(x){return '<option>'+esc(x.k)+'</option>'}).join(''));
+  fb.value=curB; fc.value=curC;
+
+  drawRows();
+  $('#footInfo').innerHTML='방문 '+((v.total||0))+'세션 · 순 방문자 '+((v.unique||0))+'명 · 신규 '+((v.newV||0))+'명<br>'+
+    '캠페인별 : '+((st.byCampaign||[]).map(function(x){return esc(x.k)+' '+x.v}).join(' · ')||'-')+'<br>'+
+    '접속 페이지 : '+(d.rows[0]&&d.rows[0].page_url?esc(d.rows[0].page_url):'-');
+}
+
+function drawRows(){
+  var rows=(DATA&&DATA.rows)||[];
+  var q=($('#q').value||'').trim().toLowerCase();
+  var fb=$('#fBlock').value, fc=$('#fChannel').value;
+  var out=rows.filter(function(r){
+    if(fb&&r.block!==fb) return false;
+    if(fc&&r.channel!==fc) return false;
+    if(!q) return true;
+    return [r.name,r.phone,r.channel,r.block,r.type,r.block2,r.type2,r.block3,r.type3].join(' ').toLowerCase().indexOf(q)>-1;
+  });
+  $('#cntInfo').textContent=out.length+'건 / 전체 '+rows.length+'건';
+  $('#emptyBox').classList.toggle('hide',out.length>0);
+  $('#rows').innerHTML=out.map(function(r){
+    var dup=r.phone&&rows.filter(function(x){return x.phone===r.phone}).length>1;
+    return '<tr>'+
+      '<td class="n">'+r.id+'</td>'+
+      '<td class="n">'+esc((r.created_at||'').slice(5,16))+'</td>'+
+      '<td>'+esc(r.name)+(dup?' <span class="tag d" title="같은 번호로 여러 건 접수">중복</span>':'')+'</td>'+
+      '<td class="p">'+esc(r.phone)+'</td>'+
+      '<td>'+((r.block||r.type)?'<span class="tag">'+esc(r.block||'-')+'</span> <span class="tag g">'+esc(r.type||'-')+'</span>':'-')+'</td>'+
+      '<td>'+((r.block2||r.type2)?esc((r.block2||'-')+' · '+(r.type2||'-')):'-')+'</td>'+
+      '<td>'+((r.block3||r.type3)?esc((r.block3||'-')+' · '+(r.type3||'-')):'-')+'</td>'+
+      '<td>'+esc(r.contact_time||'-')+'</td>'+
+      '<td>'+esc(r.channel||'-')+'</td>'+
+      '<td class="n">'+esc([r.utm_source,r.utm_medium].filter(Boolean).join('/')||'-')+'</td>'+
+      '<td><button class="rowbtn" data-edit="'+r.id+'">수정</button> '+
+          '<button class="rowbtn" data-del="'+r.id+'">삭제</button></td>'+
+    '</tr>';
+  }).join('');
+}
+
+$('#q').addEventListener('input',drawRows);
+$('#fBlock').addEventListener('change',drawRows);
+$('#fChannel').addEventListener('change',drawRows);
+
+/* ── 수정 / 삭제 ── */
+document.addEventListener('click',function(e){
+  var ed=e.target.getAttribute&&e.target.getAttribute('data-edit');
+  var dl=e.target.getAttribute&&e.target.getAttribute('data-del');
+  if(ed){
+    var r=(DATA.rows||[]).filter(function(x){return String(x.id)===String(ed)})[0];
+    if(!r) return;
+    $('#eId').value=r.id; $('#eName').value=r.name||''; $('#ePhone').value=r.phone||'';
+    $('#eBlock').value=r.block||''; $('#eType').value=r.type||'';
+    $('#eBlock2').value=r.block2||''; $('#eType2').value=r.type2||'';
+    $('#eBlock3').value=r.block3||''; $('#eType3').value=r.type3||''; $('#eChannel').value=r.channel||'';
+    $('#editModal').classList.add('on');
+  }
+  if(dl){
+    if(!confirm('이 신청내역을 삭제할까요? 되돌릴 수 없습니다.')) return;
+    api({action:'delete',id:dl}).then(function(d){ if(d&&d.ok) api().then(render); else alert('삭제하지 못했습니다.'); });
+  }
+});
+$('#eCancel').addEventListener('click',function(){$('#editModal').classList.remove('on')});
+$('#eSave').addEventListener('click',function(){
+  var body={action:'update',id:$('#eId').value,name:$('#eName').value,phone:$('#ePhone').value,
+    block:$('#eBlock').value,type:$('#eType').value,block2:$('#eBlock2').value,type2:$('#eType2').value,block3:$('#eBlock3').value,type3:$('#eType3').value,
+    channel:$('#eChannel').value};
+  if(!body.name||!body.phone){alert('이름과 연락처는 필수입니다.');return}
+  api(body).then(function(d){
+    if(d&&d.ok){$('#editModal').classList.remove('on');api().then(render)}
+    else alert('수정하지 못했습니다.');
+  });
+});
+
+/* ── CSV (한글 깨짐 방지 BOM) ── */
+$('#csvBtn').addEventListener('click',function(){
+  var rows=(DATA&&DATA.rows)||[];
+  if(!rows.length){alert('내려받을 내역이 없습니다.');return}
+  var cols=[['id','번호'],['created_at','접수일시'],['name','이름'],['phone','연락처'],
+    ['block','1순위블록'],['type','1순위평형'],['block2','2순위블록'],['type2','2순위평형'],['block3','3순위블록'],['type3','3순위평형'],['contact_time','연락가능'],
+    ['channel','유입경로'],['utm_source','utm소스'],['utm_medium','utm매체'],
+    ['utm_campaign','캠페인'],['referrer','리퍼러'],['page_url','접속페이지']];
+  var q=function(v){return '"'+String(v==null?'':v).replace(/"/g,'""')+'"'};
+  var csv=[cols.map(function(c){return q(c[1])}).join(',')]
+    .concat(rows.map(function(r){return cols.map(function(c){return q(r[c[0]])}).join(',')}))
+    .join('\r\n');
+  var blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  var a=document.createElement('a');
+  var d=new Date();
+  var stamp=d.getFullYear()+('0'+(d.getMonth()+1)).slice(-2)+('0'+d.getDate()).slice(-2)+'_'+('0'+d.getHours()).slice(-2)+('0'+d.getMinutes()).slice(-2);
+  a.href=URL.createObjectURL(blob);
+  a.download='더샵송도그란테르_사전예약_'+stamp+'.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+});
+})();
+</script>
+</body>
+</html>
